@@ -29,7 +29,6 @@ class cl_read():
         label_target_dir.grid(row = 3, column = 1)
         label_append_dir.grid(row = 4, column = 1)
            
-        # 뭐지... 이게?
         # 입력창에 받을 주소값
         self.dir_target_self = StringVar()
         self.dir_append_self = StringVar()
