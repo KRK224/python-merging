@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[5]:
-
-
 import pandas as pd
 import numpy as np
 from tkinter import*
@@ -20,6 +14,7 @@ class cl_read():
         self.window.geometry("800x750")
         self.window.resizable(width = True, height = True)
         
+        # CSV 열기 Frame 설정
         frame_open = Frame(self.window)
         frame_open.pack(padx = 10, pady = 20)
         label_target = Label(frame_open, text = "Target : ")
@@ -34,11 +29,16 @@ class cl_read():
         label_target_dir.grid(row = 3, column = 1)
         label_append_dir.grid(row = 4, column = 1)
            
-        
+        # 뭐지... 이게?
+        # 입력창에 받을 주소값
         self.dir_target_self = StringVar()
         self.dir_append_self = StringVar()
+        
+        # 받은 주소값 출력용
         self.dir_target = "입력된 target 경로입니다."
         self.dir_append = "입력된 append 경로입니다."
+        
+        # CSV 저장 변수
         self.target = None
         self.append = None
         
@@ -66,6 +66,7 @@ class cl_read():
         self.label_dir_target.configure(text = self.dir_target)
         self.label_dir_append.configure(text = self.dir_append)
         
+        # 인코딩 여부 체크박스
         self.chk_encod_target = IntVar()
         self.chk_encod_append = IntVar()
         
@@ -92,6 +93,10 @@ class cl_read():
 #         self.label_append.pack()
 
 #   Scrollbar widget 이용하기
+
+#-------------------------------------------------------------------------------------------------
+# 가로 Scroll 안됨ㅜㅜ (somebody helps me to use horizontal Scroll bar also with vertical bar)
+#-------------------------------------------------------------------------------------------------
 
         self.scroll_x_target = Scrollbar(self.data_frame_target, orient = "horizontal")
         self.scroll_x_target.pack(side = BOTTOM, fill = X)
@@ -128,12 +133,12 @@ class cl_read():
         self.window.mainloop()
     
     def find_target_dir(self):
-        self.dir_target = askopenfilename(initialdir = "C:/", title = "작업할 CSV 파일 입력", filetypes = [("csv files","*.csv")])
+        self.dir_target = askopenfilename(initialdir = "C:/", title = "작업할 CSV 파일 입력", filetypes = [("csv files","*.csv"),("all files","*.*")])
         self.label_dir_target.configure(text = self.dir_target)
         print("이것은 target 경로입니다. : ", self.dir_target)
                                     
     def find_append_dir(self):
-        self.dir_append = askopenfilename(initialdir = "C:/", title = "작업할 CSV 파일 입력", filetypes = [("csv files","*.csv")])
+        self.dir_append = askopenfilename(initialdir = "C:/", title = "작업할 CSV 파일 입력", filetypes = [("csv files","*.csv"),("all files","*.*")])
         self.label_dir_append.configure(text = self.dir_append)
         print("이것은 append 경로입니다. : ", self.dir_append)
     
@@ -147,15 +152,17 @@ class cl_read():
         self.label_dir_append.configure(text = self.dir_append)
         print("이것은 append 경로입니다. : ", self.dir_append)
     
-    def labeling_data(self):
-        self.label_target.configure(text = self.target.head())
-        self.label_append.configure(text = self.append.head())
+#     def labeling_data(self):
+#         self.label_target.configure(text = self.target.head())
+#         self.label_append.configure(text = self.append.head())
         
     def texting_data(self):
+        # 기존 텍스트 제거
         self.txt_target.delete(1.0, END)
         self.txt_append.delete(1.0, END)
-        self.txt_target.insert(INSERT, self.target.head)
-        self.txt_append.insert(INSERT, self.append.head)
+        # 읽어온 CSV 값 표시
+        self.txt_target.insert(INSERT, self.target)
+        self.txt_append.insert(INSERT, self.append)
     
     def read_csv(self):
                
@@ -191,8 +198,8 @@ class cl_read():
             except Exception as e:
                 messagebox.showinfo("Warning", e)
         
-        print(self.target.head)
-        print(self.target.head)
+        print(self.target.head())
+        print(self.append.head())
     
     def tg_col_sel(self):
         self.merge_target_col = self.col_name_tg.get()
@@ -207,11 +214,12 @@ class cl_read():
         print("선택한 옵션은 : ", self.merge_howto)
     
         
-    # 새로운 window 창 open 함수
+    # 새로운 window 창 (merge용) open 함수
     
     def open_merge_window(self):
-        
+        #Toplevel class 사용
         self.merge_window = Toplevel(self.window)
+        
         self.merge_window.title("file_merge")
         self.merge_window.geometry("800x750")
         self.merge_window.resizable(width = True, height = True)
@@ -307,7 +315,8 @@ class cl_read():
     
     def save_dat(self):
         try:
-            self.save_name = asksaveasfilename(initialdir = "C:/", title = "저장할 xlsx 파일 입력", filetypes = [("Excel files","*.xlsx")])
+            self.save_name = asksaveasfilename(initialdir = "C:/", title = "저장할 xlsx 파일 입력", filetypes = [("Excel files","*.xlsx"),("all files", "*.*")])
+            self.save_name = self.save_name + ".xlsx"
             log_text = "\n" + self.save_name
             self.txt_result.insert(END, log_text)
             self.merge_dat.to_excel(self.save_name, encoding = "utf-8-sig", index = None)
@@ -323,22 +332,3 @@ class cl_read():
             messagebox.showinfo("Warning", e)
             
 main_window = cl_read()
-
-
-# In[6]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
